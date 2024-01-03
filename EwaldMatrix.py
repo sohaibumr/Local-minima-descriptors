@@ -5,46 +5,17 @@ import numpy as np
 
 
 
-species = [
-    'H',
-    'O',
-    "B",
-    "C",
-    "N",
-    "Sc",
-    "Ti",
-    "V",
-    "Cr",
-    "Mn",
-    "Fe",
-    "Co",
-    "Ni",
-    "Cu",
-    "Zn",
-    "Y",
-    "Zr",
-    "Nb",
-    "Mo",
-    "Tc",
-    "Ru",
-    "Rh",
-    "Pd",
-    "Ag",
-    "Cd",
-    "Hf",
-    "Ta",
-    "W",
-    "Re",
-    "Os",
-    "Ir",
-    "Pt",
-    "Au"
-]
+species = [ 
+    'H', 'O', "B", "C", "N",
+    "Sc","Ti","V","Cr","Mn","Fe","Co","Ni","Cu","Zn","Y","Zr","Nb","Mo",
+     "Tc","Ru","Rh","Pd","Ag","Cd","Hf","Ta","W","Re","Os","Ir","Pt","Au"
+            ]
 
 rcut = 6
 gcut = 6
 
 # Calculate Ewald sum matrix with DScribe (https://singroup.github.io/dscribe/latest/tutorials/descriptors/ewald_sum_matrix.html)
+
 ems = EwaldSumMatrix(
     n_atoms_max=112, #maximum no of atoms in the system
     permutation="none",
