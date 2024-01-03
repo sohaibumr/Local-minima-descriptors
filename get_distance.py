@@ -103,8 +103,8 @@ def make_all():
     data_r = []
     for p in paths:
         print(p)
-        c, r = get_features(p, 10, use_upper=True)
-        data_r.append(sorted(r)[:5])  ##  distances for 5 nearest neighbours
+        c, r = get_features(p, 10, use_upper=True) # get distance for the 10 neighboring atoms
+        data_r.append(sorted(r)[:5])  ##  distances for 5 nearest neighbours saved in the file
     data_r = np.stack(data_r)
     np.savetxt("distance.csv", np.c_[ data_r], delimiter=",")
 
