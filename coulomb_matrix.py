@@ -48,29 +48,31 @@ atoms_list =   {'H': 1.,
     "Au": 79
 }
 
-## value n=5 is default, and we can change number of neighbor value in last of this function
-def get_features(path, n=5, cutoff=4, use_upper=True, charges=atoms_list):
 
+def get_features(path, n=5, cutoff=4, use_upper=True, charges=atoms_list):
+    
+    # n defines the no of neighbors, default is n=5.
+    
     atoms = read(path)
-    i = 110 # The index or symbol of atom from where you want to measure neighbors.
-    print(i, atoms[i])
-    j = get_neighbors(atoms, i, cutoff)
-    _R = atoms.get_all_distances(mic=True)
-    jj = np.concatenate([[i], j])
-    m = jj.shape[0]
-    R = _R[jj][:, jj]
+    base_atom = 110 # The index or symbol of atom from where you want to measure neighbors.
+    print(base_atom, atoms[base_atom])
+    neighbor = get_neighbors(atoms, base_atom, cutoff)
+    distances = atoms.get_all_distances(mic=True)
+    con_base_neighbor = np.concatenate([[base_atom], neighbor])
+    m = con_base_neighbor.shape[0]
+    R = distances[con_base_neighbor][:, con_base_neighbor]
 
     print('number of neighbors', m)
-    rnn = atoms.get_distances(i, j)  ##  rnn defines the distance bw atom i & j
+    distance = atoms.get_distances(base_atom, neighbor)
 
 
     C = np.zeros(shape=(m, m))
     for k in range(m):
-        i1 = jj[k]
+        i1 = con_base_neighbor[k]
         a1 = atoms[i1].symbol
         c1 = charges[a1]
         for l in range(m):
-            i2 = jj[l]
+            i2 = con_base_neighbor[l]
             a2 = atoms[i2].symbol
             c2 = charges[a2]
             if k != l:
@@ -85,19 +87,19 @@ def get_features(path, n=5, cutoff=4, use_upper=True, charges=atoms_list):
             for l in range(k + 1, m):
                 upper_diag.append(C[k, l])
         ud = np.stack(upper_diag).reshape(-1)
-        return np.sort(ud)[-n:], rnn
+        return np.sort(ud)[-n:], distance
     else:
         # eigvals
         eig = np.linalg.eig(C)
         features = np.sort(eig[0])[-n:]
-        return features, rnn
+        return features, distance
 
 
 def make_all():
     paths = Path("Path of the file or a folder").rglob('*CON*') #To read one or all files in a folder.
     data = []
     for p in paths:
-        c, r = get_features(p, 10, use_upper=True)
+        c, r = get_features(p, 10, use_upper=True) #here no of neighbors is n=10
         data.append(c)
     data = np.stack(data)
     np.sort(data)
