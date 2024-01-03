@@ -51,8 +51,10 @@ atoms_list = {
     "Au": 79
 }
 
-## value n=5 is default, and we can change number of neighbor value in last of this function
 def get_features(path, n=5, cutoff=4, use_upper=True, charges=atoms_list):
+    
+    # n defines the no of neighbors, default is n=5.
+    
     atoms = read(path)
 
     # get distances matrix
